@@ -58,6 +58,16 @@
         .animate-float {
             animation: float 3s ease-in-out infinite;
         }
+        @keyframes bounce-sticker {
+            0%, 100% { transform: scale(1) rotate(-1deg); }
+            50% { transform: scale(1.05) rotate(1deg); }
+        }
+        .animate-sticker {
+            animation: bounce-sticker 2s ease-in-out infinite;
+        }
+        .sticker-shadow {
+            filter: drop-shadow(4px 4px 0px rgba(0,0,0,1));
+        }
         /* Optimización para evitar saltos de layout en carga */
         .event-card { 
             min-height: 500px;
@@ -80,10 +90,10 @@
           }"
           @scroll.window="y = window.pageYOffset">
 
-    <div class="fixed inset-0 -z-10 bg-[#3a3a3a]">
+    <div class="fixed inset-0 -z-10 bg-[#3a3a3a]/50">
         <div class="absolute inset-0 bg-pattern opacity-80 transition-[background-position] duration-100 ease-out will-change-[background-position]"
              :style="`background-position-y: calc(50% - ${y * 0.3}px)`"></div>
-        <div class="absolute inset-0 bg-gradient-to-b from-[#3a3a3a]/40 via-purple-700/10 to-[#3a3a3a]/60"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-[#3a3a3a]/20 via-purple-700/5 to-[#3a3a3a]/30"></div>
     </div>
 
     <main class="max-w-md mx-auto px-5 py-10 flex flex-col items-center">
@@ -92,9 +102,10 @@
         <header class="text-center mb-12" x-data="{ visible: false }" x-init="setTimeout(() => visible = true, 100)">
             <div x-show="visible" x-cloak x-transition:enter="transition ease-out duration-1000" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100">
                 <img src="img/logos/Horizontal B.png" alt="Reguetón Tristito" class="w-full max-w-[300px] mx-auto mb-6 drop-shadow-2xl">
-                <div class="inline-block transform -rotate-1">
-                    <p class="text-[11px] font-black bg-white text-black px-4 py-1.5 rounded-full uppercase tracking-widest animate-pulse shadow-lg">
-                        PRÓXIMOS EVENTOS 🕺💔
+                <div class="inline-block transform sticker-shadow animate-sticker">
+                    <p class="text-[13px] font-black bg-yellow-400 text-black px-5 py-2 rounded-xl uppercase tracking-tighter border-[3px] border-black shadow-none flex items-center space-x-2">
+                        <span>PRÓXIMOS EVENTOS</span>
+                        <span class="text-xl">🕺💔</span>
                     </p>
                 </div>
             </div>
@@ -104,15 +115,18 @@
         <div class="w-full space-y-10">
 
             <!-- Spotify Widget -->
-            <div class="w-full mx-auto mb-10" x-data="{ open: false }">
-                <button @click="open = !open"
-                        class="w-full py-4 glass text-white text-center font-black rounded-2xl hover:bg-white/10 transition-all uppercase text-xs tracking-[0.3em] flex items-center justify-center space-x-3 mb-4">
-                    <span x-text="open ? 'Ocultar Playlist 💔' : 'Escuchar la Playlist 🎧'"></span>
-                    <svg class="w-4 h-4 transition-transform duration-300" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            <div class="w-full mx-auto mb-10 text-center" x-data="{ open: false }">
+                <!-- Botón de Play Circular estilo Sticker -->
+                <button x-show="!open" 
+                        @click="open = true"
+                        class="w-20 h-20 transform sticker-shadow animate-sticker bg-yellow-400 text-black rounded-full border-[3px] border-black hover:scale-110 transition-transform active:scale-95 flex items-center justify-center mx-auto group">
+                    <svg class="w-10 h-10 transform translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
                     </svg>
                 </button>
-                <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+
+                <!-- Iframe de Spotify (se muestra al dar click) -->
+                <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100">
                     <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/12P2M3n4ozp9pPSpHix83G?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
                 </div>
             </div>
@@ -193,7 +207,7 @@
                     <div class="p-8 text-center">
                         <h2 class="text-2xl font-black text-cyan-400 uppercase leading-tight mb-2 tracking-tighter">Liberia</h2>
                         <p class="text-zinc-400 text-sm mb-6 leading-relaxed italic font-medium">"El único lugar donde bloquear a tu ex es obligatorio."</p>
-                        <a :href="getLink('https://starticket.cr/')" class="block w-full py-4 bg-pink-600 text-white text-center font-black rounded-2xl hover:bg-pink-700 active:bg-pink-800 transition-all uppercase text-sm tracking-[0.2em] shadow-lg">
+                        <a :href="getLink('https://starticket.cr/e/reggaeton-tristito-liberia/8881')" class="block w-full py-4 bg-pink-600 text-white text-center font-black rounded-2xl hover:bg-pink-700 active:bg-pink-800 transition-all uppercase text-sm tracking-[0.2em] shadow-lg">
                             Asegurar mi lugar 💔
                         </a>
                     </div>
