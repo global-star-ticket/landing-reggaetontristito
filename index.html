@@ -99,8 +99,8 @@
     <main class="max-w-md mx-auto px-5 py-10 flex flex-col items-center">
 
         <!-- Header -->
-        <header class="text-center mb-12" x-data="{ visible: false }" x-init="setTimeout(() => visible = true, 100)">
-            <div x-show="visible" x-cloak x-transition:enter="transition ease-out duration-1000" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100">
+        <header class="text-center mb-12">
+            <div class="opacity-100 scale-100">
                 <img src="img/logos/Horizontal B.png" alt="Reguetón Tristito" class="w-full max-w-[300px] mx-auto mb-6 drop-shadow-2xl">
                 <div class="inline-block transform sticker-shadow animate-sticker">
                     <p class="text-[13px] font-black bg-yellow-400 text-black px-5 py-2 rounded-xl uppercase tracking-tighter border-[3px] border-black shadow-none flex items-center space-x-2">
@@ -116,18 +116,30 @@
 
             <!-- Spotify Widget -->
             <div class="w-full mx-auto mb-10 text-center" x-data="{ open: false }">
-                <!-- Botón de Play Circular estilo Sticker -->
-                <button x-show="!open" 
-                        @click="open = true"
-                        class="w-20 h-20 transform sticker-shadow animate-sticker bg-yellow-400 text-black rounded-full border-[3px] border-black hover:scale-110 transition-transform active:scale-95 flex items-center justify-center mx-auto group">
-                    <svg class="w-10 h-10 transform translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                    </svg>
-                </button>
+                <!-- Contenedor con altura mínima para evitar el brinco (152px es el height del iframe) -->
+                <div class="relative min-h-[152px] flex items-center justify-center">
+                    
+                    <!-- Botón de Play Circular estilo Sticker -->
+                    <button x-show="!open" 
+                            @click="open = true"
+                            x-transition:leave="transition ease-in duration-300"
+                            x-transition:leave-start="opacity-100 scale-100"
+                            x-transition:leave-end="opacity-0 scale-50"
+                            class="absolute w-20 h-20 transform sticker-shadow animate-sticker bg-yellow-400 text-black rounded-full border-[3px] border-black hover:scale-110 transition-transform active:scale-95 flex items-center justify-center group z-10">
+                        <svg class="w-10 h-10 transform translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                    </button>
 
-                <!-- Iframe de Spotify (se muestra al dar click) -->
-                <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100">
-                    <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/12P2M3n4ozp9pPSpHix83G?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    <!-- Iframe de Spotify -->
+                    <div x-show="open" 
+                         x-cloak 
+                         class="w-full"
+                         x-transition:enter="transition ease-out duration-500 delay-200" 
+                         x-transition:enter-start="opacity-0 scale-95" 
+                         x-transition:enter-end="opacity-100 scale-100">
+                        <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/12P2M3n4ozp9pPSpHix83G?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="eager"></iframe>
+                    </div>
                 </div>
             </div>
 
