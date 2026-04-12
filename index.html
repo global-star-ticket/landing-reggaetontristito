@@ -56,7 +56,10 @@
             animation: float 3s ease-in-out infinite;
         }
         /* Optimización para evitar saltos de layout en carga */
-        .event-card { min-height: 400px; }
+        .event-card { 
+            min-height: 500px;
+            width: 100%;
+        }
     </style>
 </head>
 <body class="bg-pattern text-white min-h-screen font-sans selection:bg-yellow-400 selection:text-black antialiased">
@@ -82,104 +85,110 @@
         <div class="w-full space-y-10">
 
             <!-- Evento 1 -->
-            <article class="glass rounded-[2rem] overflow-hidden shadow-2xl transition-transform active:scale-[0.98] border border-white/5 event-card"
-                     x-data="{ 
-                        show: false, 
-                        showV2: false,
-                        init() {
-                            setTimeout(() => this.show = true, 300);
-                            setInterval(() => this.showV2 = !this.showV2, 4000);
-                        }
-                     }" 
-                     x-show="show" x-cloak x-transition:enter="transition ease-out duration-600" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
-                <div class="relative group overflow-hidden bg-black">
-                    <!-- Imagen V1 -->
-                    <img src="img/1-mayo.jpeg" 
-                         alt="La Llorería Vol. 1 - 1 de Mayo" 
-                         class="w-full h-auto block transition-opacity duration-1000 ease-in-out"
-                         :class="showV2 ? 'opacity-0 absolute inset-0' : 'opacity-100 relative'"
-                         loading="eager">
-                    <!-- Imagen V2 -->
-                    <img src="img/1-mayo-v2.jpeg" 
-                         alt="La Llorería Vol. 1 - 1 de Mayo V2" 
-                         class="w-full h-auto block transition-opacity duration-1000 ease-in-out"
-                         :class="showV2 ? 'opacity-100 relative' : 'opacity-0 absolute inset-0'"
-                         loading="lazy">
-                    
-                    <div class="absolute top-4 right-4 z-10 bg-yellow-400 text-black text-[10px] font-black px-3 py-1.5 rounded-full shadow-xl">
-                        1 DE MAYO
+            <div class="event-card">
+                <article class="glass rounded-[2rem] overflow-hidden shadow-2xl transition-transform active:scale-[0.98] border border-white/5 h-full"
+                         x-data="{ 
+                            show: false, 
+                            showV2: false,
+                            init() {
+                                setTimeout(() => this.show = true, 300);
+                                setInterval(() => this.showV2 = !this.showV2, 4000);
+                            }
+                         }" 
+                         x-show="show" x-cloak x-transition:enter="transition ease-out duration-600" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
+                    <div class="relative group overflow-hidden bg-black">
+                        <!-- Imagen V1 -->
+                        <img src="img/1-mayo.jpeg" 
+                             alt="La Llorería Vol. 1 - 1 de Mayo" 
+                             class="w-full h-auto block transition-opacity duration-1000 ease-in-out"
+                             :class="showV2 ? 'opacity-0 absolute inset-0' : 'opacity-100 relative'"
+                             loading="eager">
+                        <!-- Imagen V2 -->
+                        <img src="img/1-mayo-v2.jpeg" 
+                             alt="La Llorería Vol. 1 - 1 de Mayo V2" 
+                             class="w-full h-auto block transition-opacity duration-1000 ease-in-out"
+                             :class="showV2 ? 'opacity-100 relative' : 'opacity-0 absolute inset-0'"
+                             loading="lazy">
+                        
+                        <div class="absolute top-4 right-4 z-10 bg-yellow-400 text-black text-[10px] font-black px-3 py-1.5 rounded-full shadow-xl">
+                            1 DE MAYO
+                        </div>
                     </div>
-                </div>
-                <div class="p-8 text-center">
-                    <h2 class="text-2xl font-black text-pink-500 uppercase leading-tight mb-2 tracking-tighter">Mercado La California</h2>
-                    <p class="text-zinc-400 text-sm mb-6 leading-relaxed italic font-medium">"Porque perrear con lágrimas también cuenta como cardio."</p>
-                    <a href="#" class="block w-full py-4 bg-white text-black text-center font-black rounded-2xl hover:bg-yellow-400 active:bg-yellow-500 transition-all uppercase text-sm tracking-[0.2em] shadow-lg">
-                        Asegurar mi lugar 💔
-                    </a>
-                </div>
-            </article>
+                    <div class="p-8 text-center">
+                        <h2 class="text-2xl font-black text-pink-500 uppercase leading-tight mb-2 tracking-tighter">Mercado La California</h2>
+                        <p class="text-zinc-400 text-sm mb-6 leading-relaxed italic font-medium">"Porque perrear con lágrimas también cuenta como cardio."</p>
+                        <a href="#" class="block w-full py-4 bg-white text-black text-center font-black rounded-2xl hover:bg-yellow-400 active:bg-yellow-500 transition-all uppercase text-sm tracking-[0.2em] shadow-lg">
+                            Asegurar mi lugar 💔
+                        </a>
+                    </div>
+                </article>
+            </div>
 
             <!-- Evento 2 -->
-            <article class="glass rounded-[2rem] overflow-hidden shadow-2xl transition-transform active:scale-[0.98] border border-white/5 event-card"
-                     x-data="{ 
-                        show: false, 
-                        showV2: false,
-                        init() {
-                            setTimeout(() => this.show = true, 500);
-                            // Desfase de 1 segundo respecto al primero para que no cambien a la vez
-                            setTimeout(() => {
-                                setInterval(() => this.showV2 = !this.showV2, 4000);
-                            }, 1000);
-                        }
-                     }" 
-                     x-show="show" x-cloak x-transition:enter="transition ease-out duration-600" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
-                <div class="relative overflow-hidden bg-black">
-                    <!-- Imagen V1 -->
-                    <img src="img/2-mayo.jpeg" 
-                         alt="Perreo y Despecho - 2 de Mayo" 
-                         class="w-full h-auto block transition-opacity duration-1000 ease-in-out"
-                         :class="showV2 ? 'opacity-0 absolute inset-0' : 'opacity-100 relative'"
-                         loading="lazy">
-                    <!-- Imagen V2 -->
-                    <img src="img/2-mayo-v2.jpeg" 
-                         alt="Perreo y Despecho - 2 de Mayo V2" 
-                         class="w-full h-auto block transition-opacity duration-1000 ease-in-out"
-                         :class="showV2 ? 'opacity-100 relative' : 'opacity-0 absolute inset-0'"
-                         loading="lazy">
+            <div class="event-card">
+                <article class="glass rounded-[2rem] overflow-hidden shadow-2xl transition-transform active:scale-[0.98] border border-white/5 h-full"
+                         x-data="{ 
+                            show: false, 
+                            showV2: false,
+                            init() {
+                                setTimeout(() => this.show = true, 500);
+                                // Desfase de 1 segundo respecto al primero para que no cambien a la vez
+                                setTimeout(() => {
+                                    setInterval(() => this.showV2 = !this.showV2, 4000);
+                                }, 1000);
+                            }
+                         }" 
+                         x-show="show" x-cloak x-transition:enter="transition ease-out duration-600" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
+                    <div class="relative overflow-hidden bg-black">
+                        <!-- Imagen V1 -->
+                        <img src="img/2-mayo.jpeg" 
+                             alt="Perreo y Despecho - 2 de Mayo" 
+                             class="w-full h-auto block transition-opacity duration-1000 ease-in-out"
+                             :class="showV2 ? 'opacity-0 absolute inset-0' : 'opacity-100 relative'"
+                             loading="lazy">
+                        <!-- Imagen V2 -->
+                        <img src="img/2-mayo-v2.jpeg" 
+                             alt="Perreo y Despecho - 2 de Mayo V2" 
+                             class="w-full h-auto block transition-opacity duration-1000 ease-in-out"
+                             :class="showV2 ? 'opacity-100 relative' : 'opacity-0 absolute inset-0'"
+                             loading="lazy">
 
-                    <div class="absolute top-4 right-4 z-10 bg-white text-black text-[10px] font-black px-3 py-1.5 rounded-full shadow-xl">
-                        2 DE MAYO
+                        <div class="absolute top-4 right-4 z-10 bg-white text-black text-[10px] font-black px-3 py-1.5 rounded-full shadow-xl">
+                            2 DE MAYO
+                        </div>
                     </div>
-                </div>
-                <div class="p-8 text-center">
-                    <h2 class="text-2xl font-black text-cyan-400 uppercase leading-tight mb-2 tracking-tighter">Liberia</h2>
-                    <p class="text-zinc-400 text-sm mb-6 leading-relaxed italic font-medium">"El único lugar donde bloquear a tu ex es obligatorio."</p>
-                    <a href="#" class="block w-full py-4 bg-pink-600 text-white text-center font-black rounded-2xl hover:bg-pink-700 active:bg-pink-800 transition-all uppercase text-sm tracking-[0.2em] shadow-lg">
-                        Asegurar mi lugar 💔
-                    </a>
-                </div>
-            </article>
+                    <div class="p-8 text-center">
+                        <h2 class="text-2xl font-black text-cyan-400 uppercase leading-tight mb-2 tracking-tighter">Liberia</h2>
+                        <p class="text-zinc-400 text-sm mb-6 leading-relaxed italic font-medium">"El único lugar donde bloquear a tu ex es obligatorio."</p>
+                        <a href="#" class="block w-full py-4 bg-pink-600 text-white text-center font-black rounded-2xl hover:bg-pink-700 active:bg-pink-800 transition-all uppercase text-sm tracking-[0.2em] shadow-lg">
+                            Asegurar mi lugar 💔
+                        </a>
+                    </div>
+                </article>
+            </div>
 
             <!-- Evento 3 -->
-            <article class="glass rounded-[2rem] overflow-hidden shadow-2xl transition-transform active:scale-[0.98] border border-white/5 event-card"
-                     x-data="{ show: false }" x-init="setTimeout(() => show = true, 700)" x-show="show" x-cloak x-transition:enter="transition ease-out duration-600" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
-                <div class="relative overflow-hidden bg-black">
-                    <img src="img/16-mayo.jpg" 
-                         alt="San Carlos - 16 de Mayo" 
-                         class="w-full h-auto block"
-                         loading="lazy">
-                    <div class="absolute top-4 right-4 z-10 bg-purple-600 text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-xl">
-                        16 DE MAYO
+            <div class="event-card">
+                <article class="glass rounded-[2rem] overflow-hidden shadow-2xl transition-transform active:scale-[0.98] border border-white/5 h-full"
+                         x-data="{ show: false }" x-init="setTimeout(() => show = true, 700)" x-show="show" x-cloak x-transition:enter="transition ease-out duration-600" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
+                    <div class="relative overflow-hidden bg-black">
+                        <img src="img/16-mayo.jpg" 
+                             alt="San Carlos - 16 de Mayo" 
+                             class="w-full h-auto block"
+                             loading="lazy">
+                        <div class="absolute top-4 right-4 z-10 bg-purple-600 text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-xl">
+                            16 DE MAYO
+                        </div>
                     </div>
-                </div>
-                <div class="p-8 text-center">
-                    <h2 class="text-2xl font-black text-yellow-400 uppercase leading-tight mb-2 tracking-tighter">San Carlos</h2>
-                    <p class="text-zinc-400 text-sm mb-6 leading-relaxed italic font-medium">"Donde el perreo no tiene fin."</p>
-                    <a href="#" class="block w-full py-4 bg-white text-black text-center font-black rounded-2xl hover:bg-yellow-400 active:bg-yellow-500 transition-all uppercase text-sm tracking-[0.2em] shadow-lg">
-                        Próximo perreo 🕺
-                    </a>
-                </div>
-            </article>
+                    <div class="p-8 text-center">
+                        <h2 class="text-2xl font-black text-yellow-400 uppercase leading-tight mb-2 tracking-tighter">San Carlos</h2>
+                        <p class="text-zinc-400 text-sm mb-6 leading-relaxed italic font-medium">"Donde el perreo no tiene fin."</p>
+                        <a href="#" class="block w-full py-4 bg-white text-black text-center font-black rounded-2xl hover:bg-yellow-400 active:bg-yellow-500 transition-all uppercase text-sm tracking-[0.2em] shadow-lg">
+                            Próximo perreo 🕺
+                        </a>
+                    </div>
+                </article>
+            </div>
 
         </div>
 
