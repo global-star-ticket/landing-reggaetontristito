@@ -32,6 +32,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Alpine.js CDN -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Ably JS SDK CDN -->
+    <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
     <style>
         [x-cloak] { display: none !important; }
         .bg-pattern {
@@ -65,8 +67,48 @@
         .animate-sticker {
             animation: bounce-sticker 2s ease-in-out infinite;
         }
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.1); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.1); }
+            70% { transform: scale(1); }
+        }
+        .animate-heartbeat {
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
         .sticker-shadow {
             filter: drop-shadow(4px 4px 0px rgba(0,0,0,1));
+        }
+        /* Animaciones para reacciones flotantes */
+        @keyframes float-up {
+            0% {
+                transform: translateY(0) translateX(var(--start-x)) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: translateY(-50px) translateX(calc(var(--start-x) + var(--wave-width))) scale(1.2);
+            }
+            30% {
+                transform: translateY(-20vh) translateX(calc(var(--start-x) - var(--wave-width))) scale(1);
+            }
+            60% {
+                transform: translateY(-50vh) translateX(calc(var(--start-x) + var(--wave-width))) scale(1.1);
+            }
+            100% {
+                transform: translateY(-110vh) translateX(calc(var(--start-x) - var(--wave-width))) scale(1) rotate(var(--end-rotate));
+                opacity: 0;
+            }
+        }
+        .reaction-emoji {
+            position: fixed;
+            bottom: -50px;
+            pointer-events: none;
+            z-index: 100;
+            font-size: 2.5rem;
+            animation: float-up var(--duration) ease-in-out forwards;
+            will-change: transform, opacity;
         }
         /* Optimización para evitar saltos de layout en carga */
         .event-card { 
@@ -86,14 +128,93 @@
                     return url.toString();
                 }
                 return base;
+            },
+            // Configuración de Ably y Reacciones
+            ably: null,
+            channel: null,
+            reactions: [],
+            emojis: ['🕺', '💔', '😭', '🔥', '💃'],
+            initAbly() {
+                // REEMPLAZAR 'YOUR_ABLY_API_KEY' CON TU API KEY REAL DE ABLY
+                const apiKey = 'lw87vQ.Ncq-0A:SWk1zEMPRcsXC3J_ctOLxLzESPM59FBmoThtPbqVQJA';
+                if (apiKey === 'YOUR_ABLY_API_KEY') {
+                    console.warn('Ably API Key no configurada. Las reacciones solo funcionarán localmente.');
+                }
+                
+                try {
+                    const clientId = 'user-' + Math.random().toString(36).substr(2, 9);
+                    this.ably = new Ably.Realtime({ key: apiKey, clientId: clientId });
+                    this.channel = this.ably.channels.get('reactions');
+                    
+                    this.channel.subscribe('emoji', (message) => {
+                        // Evitar duplicados: solo spawnear si no es el remitente local
+                        if (message.clientId !== clientId) {
+                            this.spawnEmoji(message.data);
+                        }
+                    });
+                } catch (e) {
+                    console.error('Error al conectar con Ably:', e);
+                }
+            },
+            sendEmoji(emoji) {
+                this.spawnEmoji(emoji);
+                if (this.channel) {
+                    this.channel.publish('emoji', emoji);
+                }
+            },
+            spawnEmoji(emoji) {
+                const id = Date.now() + Math.random();
+                const left = Math.random() * 80 + 10; // entre 10% y 90%
+                const duration = (Math.random() * 2 + 2).toFixed(2) + 's'; // 2s a 4s
+                const startX = (Math.random() * 40 - 20) + 'px'; // -20px a 20px
+                const waveWidth = (Math.random() * 50 + 20) + 'px'; // 20px a 70px
+                const endRotate = (Math.random() * 90 - 45) + 'deg'; // -45deg a 45deg
+                
+                this.reactions.push({ 
+                    id, 
+                    emoji, 
+                    left, 
+                    duration, 
+                    startX, 
+                    waveWidth, 
+                    endRotate 
+                });
+                
+                // Limpiar después de la animación (máximo 4s)
+                setTimeout(() => {
+                    this.reactions = this.reactions.filter(r => r.id !== id);
+                }, 4100);
             }
           }"
+          x-init="initAbly()"
           @scroll.window="y = window.pageYOffset">
 
     <div class="fixed inset-0 -z-10 bg-[#3a3a3a]/50">
         <div class="absolute inset-0 bg-pattern opacity-80 transition-[background-position] duration-100 ease-out will-change-[background-position]"
              :style="`background-position-y: calc(50% - ${y * 0.3}px)`"></div>
         <div class="absolute inset-0 bg-gradient-to-b from-[#3a3a3a]/20 via-purple-700/5 to-[#3a3a3a]/30"></div>
+    </div>
+
+    <!-- Reacciones flotantes -->
+    <template x-for="reaction in reactions" :key="reaction.id">
+        <div class="reaction-emoji" 
+             :style="`left: ${reaction.left}%; 
+                      --duration: ${reaction.duration}; 
+                      --start-x: ${reaction.startX}; 
+                      --wave-width: ${reaction.waveWidth}; 
+                      --end-rotate: ${reaction.endRotate};`" 
+             x-text="reaction.emoji">
+        </div>
+    </template>
+
+    <!-- Barra de Reacciones Fija -->
+    <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center space-x-2 bg-black/40 backdrop-blur-xl border border-white/10 p-2 rounded-2xl sticker-shadow transition-transform hover:scale-105 active:scale-95">
+        <template x-for="emoji in emojis">
+            <button @click="sendEmoji(emoji)" 
+                    class="text-2xl p-2 hover:bg-white/10 rounded-xl transition-colors active:scale-125"
+                    x-text="emoji">
+            </button>
+        </template>
     </div>
 
     <main class="max-w-md mx-auto px-5 py-10 flex flex-col items-center">
@@ -254,7 +375,7 @@
         <!-- Footer -->
         <footer class="mt-20 text-center space-y-8 pb-16 w-full">
             <div class="flex flex-col items-center space-y-8">
-                <img src="img/logos/Vertical B.png" alt="Logo" class="w-32 hover:scale-105 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                <img src="img/logos/Vertical B.png" alt="Logo" class="w-32 animate-heartbeat transition-transform duration-500 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
 
                 <p class="text-white text-lg font-black uppercase tracking-widest italic drop-shadow-lg">
                     Una fiesta para perrear y llorar bb
