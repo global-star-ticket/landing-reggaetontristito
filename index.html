@@ -134,6 +134,8 @@
             channel: null,
             reactions: [],
             emojis: ['🕺', '💔', '😭', '🔥', '💃'],
+            lastEmojiSent: 0,
+            emojiCount: 0,
             initAbly() {
                 // REEMPLAZAR 'YOUR_ABLY_API_KEY' CON TU API KEY REAL DE ABLY
                 const apiKey = 'lw87vQ.Ncq-0A:SWk1zEMPRcsXC3J_ctOLxLzESPM59FBmoThtPbqVQJA';
@@ -157,6 +159,15 @@
                 }
             },
             sendEmoji(emoji) {
+                const now = Date.now();
+                if (now - this.lastEmojiSent < 1000) {
+                    if (this.emojiCount >= 2) return;
+                    this.emojiCount++;
+                } else {
+                    this.lastEmojiSent = now;
+                    this.emojiCount = 1;
+                }
+                
                 this.spawnEmoji(emoji);
                 if (this.channel) {
                     this.channel.publish('emoji', emoji);
