@@ -38,7 +38,11 @@
         html, body {
             touch-action: manipulation;
         }
-        [x-cloak] { display: none !important; }
+
+        [x-cloak] {
+            display: none !important;
+        }
+
         .bg-pattern {
             background-image: url('img/fond.png');
             background-size: 600px;
@@ -49,40 +53,69 @@
             width: 100%;
             height: 100%;
         }
+
         .glass {
             background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
         }
+
         .animate-float {
             animation: float 3s ease-in-out infinite;
         }
+
         @keyframes bounce-sticker {
-            0%, 100% { transform: scale(1) rotate(-1deg); }
-            50% { transform: scale(1.05) rotate(1deg); }
+            0%, 100% {
+                transform: scale(1) rotate(-1deg);
+            }
+            50% {
+                transform: scale(1.05) rotate(1deg);
+            }
         }
+
         .animate-sticker {
             animation: bounce-sticker 2s ease-in-out infinite;
         }
+
         @keyframes heartbeat {
-            0% { transform: scale(1); }
-            14% { transform: scale(1.1); }
-            28% { transform: scale(1); }
-            42% { transform: scale(1.1); }
-            70% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+            14% {
+                transform: scale(1.1);
+            }
+            28% {
+                transform: scale(1);
+            }
+            42% {
+                transform: scale(1.1);
+            }
+            70% {
+                transform: scale(1);
+            }
         }
+
         .animate-heartbeat {
             animation: heartbeat 1.5s ease-in-out infinite;
         }
+
         .sticker-shadow {
-            filter: drop-shadow(4px 4px 0px rgba(0,0,0,1));
+            filter: drop-shadow(4px 4px 0px rgba(0, 0, 0, 1));
         }
+
         /* Animaciones para reacciones flotantes */
         @keyframes float-up {
             0% {
@@ -104,6 +137,7 @@
                 opacity: 0;
             }
         }
+
         .reaction-emoji {
             position: fixed;
             bottom: -50px;
@@ -113,15 +147,16 @@
             animation: float-up var(--duration) ease-in-out forwards;
             will-change: transform, opacity;
         }
+
         /* Optimización para evitar saltos de layout en carga */
-        .event-card { 
+        .event-card {
             min-height: 500px;
             width: 100%;
         }
     </style>
 </head>
-    <body class="text-white min-h-screen font-sans selection:bg-yellow-400 selection:text-black antialiased overflow-x-hidden"
-          x-data="{ 
+<body class="text-white min-h-screen font-sans selection:bg-yellow-400 selection:text-black antialiased overflow-x-hidden"
+      x-data="{
             y: 0,
             ref: new URLSearchParams(window.location.search).get('ref'),
             getLink(base) {
@@ -200,131 +235,124 @@
                 }, 4100);
             }
           }"
-          x-init="initAbly()"
-          @scroll.window="y = window.pageYOffset">
+      x-init="initAbly()"
+      @scroll.window="y = window.pageYOffset">
 
-    <div class="fixed inset-0 -z-10 bg-[#3a3a3a]/50">
-        <div class="absolute inset-0 bg-pattern opacity-80 transition-[background-position] duration-100 ease-out will-change-[background-position]"
-             :style="`background-position-y: calc(50% - ${y * 0.3}px)`"></div>
-        <div class="absolute inset-0 bg-gradient-to-b from-[#3a3a3a]/20 via-purple-700/5 to-[#3a3a3a]/30"></div>
-    </div>
+<div class="fixed inset-0 -z-10 bg-[#3a3a3a]/50">
+    <div class="absolute inset-0 bg-pattern opacity-80 transition-[background-position] duration-100 ease-out will-change-[background-position]"
+         :style="`background-position-y: calc(50% - ${y * 0.3}px)`"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-[#3a3a3a]/20 via-purple-700/5 to-[#3a3a3a]/30"></div>
+</div>
 
-    <!-- Reacciones flotantes -->
-    <template x-for="reaction in reactions" :key="reaction.id">
-        <div class="reaction-emoji" 
-             :style="`left: ${reaction.left}%; 
+<!-- Reacciones flotantes -->
+<template x-for="reaction in reactions" :key="reaction.id">
+    <div class="reaction-emoji"
+         :style="`left: ${reaction.left}%;
                       --duration: ${reaction.duration}; 
                       --start-x: ${reaction.startX}; 
                       --wave-width: ${reaction.waveWidth}; 
-                      --end-rotate: ${reaction.endRotate};`" 
-             x-text="reaction.emoji">
-        </div>
-    </template>
-
-    <!-- Barra de Reacciones Fija -->
-    <div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center space-x-2 bg-black/40 backdrop-blur-xl border border-white/10 p-2 rounded-2xl sticker-shadow transition-transform hover:scale-105 active:scale-95">
-        <template x-for="emoji in emojis">
-            <button @click="sendEmoji(emoji)" 
-                    class="text-2xl p-2 hover:bg-white/10 rounded-xl transition-colors active:scale-125"
-                    x-text="emoji">
-            </button>
-        </template>
+                      --end-rotate: ${reaction.endRotate};`"
+         x-text="reaction.emoji">
     </div>
+</template>
 
-    <main class="max-w-md mx-auto px-5 py-10 flex flex-col items-center">
+<!-- Barra de Reacciones Fija -->
+<div class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center space-x-2 bg-black/40 backdrop-blur-xl border border-white/10 p-2 rounded-2xl sticker-shadow transition-transform hover:scale-105 active:scale-95">
+    <template x-for="emoji in emojis">
+        <button @click="sendEmoji(emoji)"
+                class="text-2xl p-2 hover:bg-white/10 rounded-xl transition-colors active:scale-125"
+                x-text="emoji">
+        </button>
+    </template>
+</div>
 
-        <!-- Header -->
-        <header class="text-center mb-12">
-            <div class="opacity-100 scale-100">
-                <img src="img/logos/Horizontal B.png" alt="Reguetón Tristito" class="w-full max-w-[300px] mx-auto mb-6 drop-shadow-2xl">
-                <div class="inline-block transform sticker-shadow animate-sticker">
-                    <p class="text-[13px] font-black bg-yellow-400 text-black px-5 py-2 rounded-xl uppercase tracking-tighter border-[3px] border-black shadow-none flex items-center space-x-2">
-                        <span>PRÓXIMOS EVENTOS</span>
-                        <span class="text-xl">🕺💔</span>
-                    </p>
+<main class="max-w-md mx-auto px-5 py-10 flex flex-col items-center">
+
+    <!-- Header -->
+    <header class="text-center mb-12">
+        <div class="opacity-100 scale-100">
+            <img src="img/logos/Horizontal B.png" alt="Reguetón Tristito" class="w-full max-w-[300px] mx-auto mb-6 drop-shadow-2xl">
+            <div class="inline-block transform sticker-shadow animate-sticker">
+                <p class="text-[13px] font-black bg-yellow-400 text-black px-5 py-2 rounded-xl uppercase tracking-tighter border-[3px] border-black shadow-none flex items-center space-x-2">
+                    <span>PRÓXIMOS EVENTOS</span>
+                    <span class="text-xl">🕺💔</span>
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sección de Eventos -->
+    <div class="w-full space-y-10">
+
+        <!-- Spotify Widget -->
+        <div class="w-full mx-auto mb-10 text-center" x-data="{ open: false }">
+            <!-- Contenedor con altura mínima para evitar el brinco (152px es el height del iframe) -->
+            <div class="relative min-h-[152px] flex items-center justify-center">
+
+                <!-- Botón de Play Circular estilo Sticker -->
+                <button x-show="!open"
+                        @click="open = true"
+                        x-transition:leave="transition ease-in duration-300"
+                        x-transition:leave-start="opacity-100 scale-100"
+                        x-transition:leave-end="opacity-0 scale-50"
+                        class="absolute w-20 h-20 transform sticker-shadow animate-sticker bg-yellow-400 text-black rounded-full border-[3px] border-black hover:scale-110 transition-transform active:scale-95 flex items-center justify-center group z-10">
+                    <svg class="w-10 h-10 transform translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                </button>
+
+                <!-- Iframe de Spotify -->
+                <div x-show="open"
+                     x-cloak
+                     class="w-full"
+                     x-transition:enter="transition ease-out duration-500 delay-200"
+                     x-transition:enter-start="opacity-0 scale-95"
+                     x-transition:enter-end="opacity-100 scale-100">
+                    <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/12P2M3n4ozp9pPSpHix83G?utm_source=generator&theme=0" width="100%"
+                            height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="eager"></iframe>
                 </div>
             </div>
-        </header>
+        </div>
 
-        <!-- Sección de Eventos -->
-        <div class="w-full space-y-10">
-
-            <!-- Spotify Widget -->
-            <div class="w-full mx-auto mb-10 text-center" x-data="{ open: false }">
-                <!-- Contenedor con altura mínima para evitar el brinco (152px es el height del iframe) -->
-                <div class="relative min-h-[152px] flex items-center justify-center">
-                    
-                    <!-- Botón de Play Circular estilo Sticker -->
-                    <button x-show="!open" 
-                            @click="open = true"
-                            x-transition:leave="transition ease-in duration-300"
-                            x-transition:leave-start="opacity-100 scale-100"
-                            x-transition:leave-end="opacity-0 scale-50"
-                            class="absolute w-20 h-20 transform sticker-shadow animate-sticker bg-yellow-400 text-black rounded-full border-[3px] border-black hover:scale-110 transition-transform active:scale-95 flex items-center justify-center group z-10">
-                        <svg class="w-10 h-10 transform translate-x-0.5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M8 5v14l11-7z"/>
-                        </svg>
-                    </button>
-
-                    <!-- Iframe de Spotify -->
-                    <div x-show="open" 
-                         x-cloak 
-                         class="w-full"
-                         x-transition:enter="transition ease-out duration-500 delay-200" 
-                         x-transition:enter-start="opacity-0 scale-95" 
-                         x-transition:enter-end="opacity-100 scale-100">
-                        <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/12P2M3n4ozp9pPSpHix83G?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="eager"></iframe>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Evento 1 -->
-            <div class="event-card">
-                <article class="glass rounded-[2rem] overflow-hidden shadow-2xl transition-transform active:scale-[0.98] border border-white/5 h-full"
-                         x-data="{ 
+        <!-- Evento 1 -->
+        <div class="event-card">
+            <article class="glass rounded-[2rem] overflow-hidden shadow-2xl transition-transform active:scale-[0.98] border border-white/5 h-full"
+                     x-data="{
                             show: false, 
                             showV2: false,
                             init() {
                                 setTimeout(() => this.show = true, 300);
                                 setInterval(() => this.showV2 = !this.showV2, 4000);
                             }
-                         }" 
-                         x-show="show" x-cloak x-transition:enter="transition ease-out duration-600" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
-                    <div class="relative group overflow-hidden bg-black">
-                        <!-- Imagen V1 -->
-                        <img src="img/1-mayo.jpeg" 
-                             alt="La Llorería Vol. 1 - 1 de Mayo" 
-                             class="w-full h-auto block transition-opacity duration-1000 ease-in-out"
-                             :class="showV2 ? 'opacity-0 absolute inset-0' : 'opacity-100 relative'"
-                             loading="eager">
-                        <!-- Imagen V2 -->
-                        <img src="img/1-mayo-v2.jpeg" 
-                             alt="La Llorería Vol. 1 - 1 de Mayo V2" 
-                             class="w-full h-auto block transition-opacity duration-1000 ease-in-out"
-                             :class="showV2 ? 'opacity-100 relative' : 'opacity-0 absolute inset-0'"
-                             loading="lazy">
-                        
-                        <div class="absolute top-4 right-4 z-10 bg-yellow-400 text-black text-[10px] font-black px-3 py-1.5 rounded-full shadow-xl">
-                            1 DE MAYO
-                        </div>
+                         }"
+                     x-show="show" x-cloak x-transition:enter="transition ease-out duration-600" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
+                <div class="relative overflow-hidden bg-black">
+                    <img src="img/1-mayo.png"
+                         alt="San Carlos - 16 de Mayo"
+                         class="w-full h-auto block"
+                         loading="lazy">
+                    <div class="absolute top-4 right-4 z-10 bg-yellow-400 text-black text-[10px] font-black px-3 py-1.5 rounded-full shadow-xl">
+                        1 DE MAYO
                     </div>
-                    <div class="p-8 text-center">
-                        <h2 class="text-2xl font-black text-pink-500 uppercase leading-tight mb-2 tracking-tighter">
-                            San Jose<br>
-                            <span class="text-lg">Mercado La California</span>
-                        </h2>
-                        <p class="text-zinc-400 text-sm mb-6 leading-relaxed italic font-medium">"Para perrear llorando"</p>
-                        <a :href="getLink('https://starticket.cr/')" class="block w-full py-4 bg-white text-black text-center font-black rounded-2xl hover:bg-yellow-400 active:bg-yellow-500 transition-all uppercase text-sm tracking-[0.2em] shadow-lg">
-                            Comprar Entradas
-                        </a>
-                    </div>
-                </article>
-            </div>
+                </div>
+                <div class="p-8 text-center">
+                    <h2 class="text-2xl font-black text-pink-500 uppercase leading-tight mb-2 tracking-tighter">
+                        San Jose<br>
+                        <span class="text-lg">Mercado La California</span>
+                    </h2>
+                    <p class="text-zinc-400 text-sm mb-6 leading-relaxed italic font-medium">"Para perrear llorando"</p>
+                    <a :href="getLink('https://starticket.cr/e/san-jose-la-fiesta-de-reggaeton-tristito/8899')"
+                       class="block w-full py-4 bg-white text-black text-center font-black rounded-2xl hover:bg-yellow-400 active:bg-yellow-500 transition-all uppercase text-sm tracking-[0.2em] shadow-lg">
+                        Comprar Entradas
+                    </a>
+                </div>
+            </article>
+        </div>
 
-            <!-- Evento 2 -->
-            <div class="event-card">
-                <article class="glass rounded-[2rem] overflow-hidden shadow-2xl transition-transform active:scale-[0.98] border border-white/5 h-full"
-                         x-data="{ 
+        <!-- Evento 2 -->
+        <div class="event-card">
+            <article class="glass rounded-[2rem] overflow-hidden shadow-2xl transition-transform active:scale-[0.98] border border-white/5 h-full"
+                     x-data="{
                             show: false, 
                             showV2: false,
                             init() {
@@ -334,82 +362,78 @@
                                     setInterval(() => this.showV2 = !this.showV2, 4000);
                                 }, 1000);
                             }
-                         }" 
-                         x-show="show" x-cloak x-transition:enter="transition ease-out duration-600" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
-                    <div class="relative overflow-hidden bg-black">
-                        <!-- Imagen V1 -->
-                        <img src="img/2-mayo.jpeg" 
-                             alt="Perreo y Despecho - 2 de Mayo" 
-                             class="w-full h-auto block transition-opacity duration-1000 ease-in-out"
-                             :class="showV2 ? 'opacity-0 absolute inset-0' : 'opacity-100 relative'"
-                             loading="lazy">
-                        <!-- Imagen V2 -->
-                        <img src="img/2-mayo-v2.jpeg" 
-                             alt="Perreo y Despecho - 2 de Mayo V2" 
-                             class="w-full h-auto block transition-opacity duration-1000 ease-in-out"
-                             :class="showV2 ? 'opacity-100 relative' : 'opacity-0 absolute inset-0'"
-                             loading="lazy">
-
-                        <div class="absolute top-4 right-4 z-10 bg-white text-black text-[10px] font-black px-3 py-1.5 rounded-full shadow-xl">
-                            2 DE MAYO
-                        </div>
+                         }"
+                     x-show="show" x-cloak x-transition:enter="transition ease-out duration-600" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
+                <div class="relative overflow-hidden bg-black">
+                    <img src="img/2-mayo.png"
+                         alt="San Carlos - 16 de Mayo"
+                         class="w-full h-auto block"
+                         loading="lazy">
+                    <div class="absolute top-4 right-4 z-10 bg-white text-black text-[10px] font-black px-3 py-1.5 rounded-full shadow-xl">
+                        2 DE MAYO
                     </div>
-                    <div class="p-8 text-center">
-                        <h2 class="text-2xl font-black text-cyan-400 uppercase leading-tight mb-2 tracking-tighter">Liberia</h2>
-                        <p class="text-zinc-400 text-sm mb-6 leading-relaxed italic font-medium">"Para perrear llorando"</p>
-                        <a :href="getLink('https://starticket.cr/e/reggaeton-tristito-liberia/8881')" class="block w-full py-4 bg-pink-600 text-white text-center font-black rounded-2xl hover:bg-pink-700 active:bg-pink-800 transition-all uppercase text-sm tracking-[0.2em] shadow-lg">
-                            Comprar Entradas
-                        </a>
-                    </div>
-                </article>
-            </div>
-
-            <!-- Evento 3 -->
-            <div class="event-card">
-                <article class="glass rounded-[2rem] overflow-hidden shadow-2xl transition-transform active:scale-[0.98] border border-white/5 h-full"
-                         x-data="{ show: false }" x-init="setTimeout(() => show = true, 700)" x-show="show" x-cloak x-transition:enter="transition ease-out duration-600" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
-                    <div class="relative overflow-hidden bg-black">
-                        <img src="img/16-mayo.jpg"
-                             alt="San Carlos - 16 de Mayo"
-                             class="w-full h-auto block"
-                             loading="lazy">
-                        <div class="absolute top-4 right-4 z-10 bg-purple-600 text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-xl">
-                            16 DE MAYO
-                        </div>
-                    </div>
-                    <div class="p-8 text-center">
-                        <h2 class="text-2xl font-black text-yellow-400 uppercase leading-tight mb-2 tracking-tighter">San Carlos</h2>
-                        <p class="text-zinc-400 text-sm mb-6 leading-relaxed italic font-medium">"Para perrear llorando"</p>
-                        <a :href="getLink('https://starticket.cr/e/san-carlos-la-fiesta-de-reggaeton-tristito/8885')" class="block w-full py-4 bg-white text-black text-center font-black rounded-2xl hover:bg-yellow-400 active:bg-yellow-500 transition-all uppercase text-sm tracking-[0.2em] shadow-lg">
-                            Comprar Entradas
-                        </a>
-                    </div>
-                </article>
-            </div>
-
-        </div>
-
-        <!-- Footer -->
-        <footer class="mt-20 text-center space-y-8 pb-16 w-full">
-            <div class="flex flex-col items-center space-y-8">
-                <img src="img/logos/Vertical B.png" alt="Logo" class="w-32 animate-heartbeat transition-transform duration-500 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
-
-                <p class="text-white text-lg font-black uppercase tracking-widest italic drop-shadow-lg">
-                    Una fiesta para perrear y llorar bb
-                </p>
-
-                <div class="flex justify-center items-center space-x-8">
-                    <a href="https://www.instagram.com/reggaetontristito/" target="_blank" class="animate-float p-3 bg-white/5 rounded-full hover:bg-white/10 transition-colors">
-                        <svg class="w-8 h-8 text-pink-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </div>
+                <div class="p-8 text-center">
+                    <h2 class="text-2xl font-black text-cyan-400 uppercase leading-tight mb-2 tracking-tighter">Liberia</h2>
+                    <p class="text-zinc-400 text-sm mb-6 leading-relaxed italic font-medium">"Para perrear llorando"</p>
+                    <a :href="getLink('https://starticket.cr/e/reggaeton-tristito-liberia/8881')"
+                       class="block w-full py-4 bg-pink-600 text-white text-center font-black rounded-2xl hover:bg-pink-700 active:bg-pink-800 transition-all uppercase text-sm tracking-[0.2em] shadow-lg">
+                        Comprar Entradas
                     </a>
                 </div>
-            </div>
-            <div class="text-[9px] text-white tracking-[0.4em] font-bold uppercase leading-loose px-4">
-                &copy; 2026 REGGAETÓN TRISTITO
-            </div>
-        </footer>
+            </article>
+        </div>
 
-    </main>
+        <!-- Evento 3 -->
+        <div class="event-card">
+            <article class="glass rounded-[2rem] overflow-hidden shadow-2xl transition-transform active:scale-[0.98] border border-white/5 h-full"
+                     x-data="{ show: false }" x-init="setTimeout(() => show = true, 700)" x-show="show" x-cloak x-transition:enter="transition ease-out duration-600"
+                     x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
+                <div class="relative overflow-hidden bg-black">
+                    <img src="img/16-mayo.png"
+                         alt="San Carlos - 16 de Mayo"
+                         class="w-full h-auto block"
+                         loading="lazy">
+                    <div class="absolute top-4 right-4 z-10 bg-purple-600 text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-xl">
+                        16 DE MAYO
+                    </div>
+                </div>
+                <div class="p-8 text-center">
+                    <h2 class="text-2xl font-black text-yellow-400 uppercase leading-tight mb-2 tracking-tighter">San Carlos</h2>
+                    <p class="text-zinc-400 text-sm mb-6 leading-relaxed italic font-medium">"Para perrear llorando"</p>
+                    <a :href="getLink('https://starticket.cr/e/san-carlos-la-fiesta-de-reggaeton-tristito/8885')"
+                       class="block w-full py-4 bg-white text-black text-center font-black rounded-2xl hover:bg-yellow-400 active:bg-yellow-500 transition-all uppercase text-sm tracking-[0.2em] shadow-lg">
+                        Comprar Entradas
+                    </a>
+                </div>
+            </article>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-20 text-center space-y-8 pb-16 w-full">
+        <div class="flex flex-col items-center space-y-8">
+            <img src="img/logos/Vertical B.png" alt="Logo" class="w-32 animate-heartbeat transition-transform duration-500 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+
+            <p class="text-white text-lg font-black uppercase tracking-widest italic drop-shadow-lg">
+                Una fiesta para perrear y llorar bb
+            </p>
+
+            <div class="flex justify-center items-center space-x-8">
+                <a href="https://www.instagram.com/reggaetontristito/" target="_blank" class="animate-float p-3 bg-white/5 rounded-full hover:bg-white/10 transition-colors">
+                    <svg class="w-8 h-8 text-pink-500" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <div class="text-[9px] text-white tracking-[0.4em] font-bold uppercase leading-loose px-4">
+            &copy; 2026 REGGAETÓN TRISTITO
+        </div>
+    </footer>
+
+</main>
 
 </body>
 </html>
