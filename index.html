@@ -327,7 +327,7 @@
                          }"
                      x-show="show" x-cloak x-transition:enter="transition ease-out duration-600" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
                 <div class="relative overflow-hidden bg-black">
-                    <img src="img/1-mayo.png"
+                    <img src="img/1-mayo-singap.png"
                          alt="San Carlos - 16 de Mayo"
                          class="w-full h-auto block"
                          loading="lazy">
@@ -387,7 +387,7 @@
         <!-- Evento 3 -->
         <div class="event-card">
             <article class="glass rounded-[2rem] overflow-hidden shadow-2xl transition-transform active:scale-[0.98] border border-white/5 h-full"
-                     x-data="{ show: false }" x-init="setTimeout(() => show = true, 700)" x-show="show" x-cloak x-transition:enter="transition ease-out duration-600"
+                     x-data="{ show: false }" x-init="setTimeout(() => show = true, 600)" x-show="show" x-cloak x-transition:enter="transition ease-out duration-600"
                      x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
                 <div class="relative overflow-hidden bg-black">
                     <img src="img/16-mayo.png"
@@ -403,6 +403,34 @@
                     <p class="text-zinc-400 text-sm mb-6 leading-relaxed italic font-medium">"Para perrear llorando"</p>
                     <a :href="getLink('https://starticket.cr/e/san-carlos-la-fiesta-de-reggaeton-tristito/8885')"
                        class="block w-full py-4 bg-white text-black text-center font-black rounded-2xl hover:bg-yellow-400 active:bg-yellow-500 transition-all uppercase text-sm tracking-[0.2em] shadow-lg">
+                        Comprar Entradas
+                    </a>
+                </div>
+            </article>
+        </div>
+
+        <!-- Evento 4 (Micro TDH) -->
+        <div class="event-card">
+            <article class="glass rounded-[2rem] overflow-hidden shadow-2xl transition-transform active:scale-[0.98] border border-white/5 h-full"
+                     x-data="{ show: false }" x-init="setTimeout(() => show = true, 800)" x-show="show" x-cloak x-transition:enter="transition ease-out duration-600"
+                     x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
+                <div class="relative overflow-hidden bg-black">
+                    <img src="img/micro-tdh.jpeg"
+                         alt="Micro TDH - 15 de Mayo"
+                         class="w-full h-auto block"
+                         loading="lazy">
+                    <div class="absolute top-4 right-4 z-10 bg-pink-500 text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-xl">
+                        15 DE MAYO
+                    </div>
+                </div>
+                <div class="p-8 text-center">
+                    <h2 class="text-2xl font-black text-white uppercase leading-tight mb-2 tracking-tighter">
+                        San Jose<br>
+                        <span class="text-lg">Mercado La California</span>
+                    </h2>
+                    <p class="text-zinc-400 text-sm mb-6 leading-relaxed italic font-medium">"Segundo Acto Tour"</p>
+                    <a :href="getLink('https://mistickets.com/ticket-detail/1/285')"
+                       class="block w-full py-4 bg-[#ff4d4d] text-white text-center font-black rounded-2xl hover:bg-red-600 active:bg-red-700 transition-all uppercase text-sm tracking-[0.2em] shadow-lg">
                         Comprar Entradas
                     </a>
                 </div>
